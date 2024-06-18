@@ -1,0 +1,137 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Conversation {
+  """Id of the conversation"""
+  id: Int!
+
+  """Name of the conversation"""
+  name: String
+
+  """Id of the recipient"""
+  recipientId: Int!
+
+  """Id of the user"""
+  userId: Int!
+}
+
+input CreateConversationInput {
+  """Name of the conversation"""
+  name: String
+
+  """Id of the recipient"""
+  recipientId: Int!
+
+  """Id of the user"""
+  userId: Int!
+}
+
+input CreateMessageInput {
+  """Content of the message"""
+  content: String!
+
+  """Id of the conversation"""
+  conversationId: Int!
+
+  """Date of the message"""
+  date: String!
+
+  """Id of the user"""
+  userId: Int!
+}
+
+input CreateUserInput {
+  """Email of the user"""
+  email: String!
+
+  """FirstName of the user"""
+  firstname: String!
+
+  """LastName of the user"""
+  lastname: String!
+
+  """Password of the user"""
+  password: String!
+}
+
+type Message {
+  """Content of the message"""
+  content: String!
+
+  """Id of the conversation"""
+  conversationId: Int!
+
+  """Date of the message"""
+  date: String!
+
+  """Id of the message"""
+  id: Int!
+
+  """Id of the user"""
+  userId: Int!
+}
+
+type Mutation {
+  createConversation(createConversationInput: CreateConversationInput!): Conversation!
+  createMessage(createMessageInput: CreateMessageInput!): Message!
+  createUser(createUserInput: CreateUserInput!): User!
+  removeConversation(id: Int!): Conversation!
+  removeMessage(id: Int!): Message!
+  removeUser(id: Int!): User!
+  updateConversation(updateConversationInput: UpdateConversationInput!): Conversation!
+  updateMessage(updateMessageInput: UpdateMessageInput!): Message!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+}
+
+type Query {
+  conversation(id: Int!): Conversation!
+  conversationMessages(id: Int!): [Message!]!
+  conversations: [Conversation!]!
+  getHealth: String!
+  message(id: Int!): Message!
+  messages: [Message!]!
+  user(id: Int!): User!
+  userConversations(id: Int!): [Conversation!]!
+  users: [User!]!
+}
+
+input UpdateConversationInput {
+  id: Int!
+  name: String
+  recipientId: Int!
+  userId: Int!
+}
+
+input UpdateMessageInput {
+  content: String!
+  conversationId: Int!
+  date: String!
+  id: Int!
+  userId: Int!
+}
+
+input UpdateUserInput {
+  email: String
+  firstname: String
+  id: Int!
+  lastname: String
+  password: String
+}
+
+type User {
+  """Email of the user"""
+  email: String!
+
+  """FirstName of the user"""
+  firstname: String!
+
+  """Id of the user"""
+  id: Int!
+
+  """LastName of the user"""
+  lastname: String!
+
+  """Password of the user"""
+  password: String!
+}
