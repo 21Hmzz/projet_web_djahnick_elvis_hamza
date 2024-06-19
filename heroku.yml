@@ -1,9 +1,0 @@
-build:
-  docker:
-    web: Dockerfile
-    redis: redis:latest
-
-release:
-  image: 21hmzz/21hmzz-nestapp:latest
-  command:
-    - docker-compose up -d
