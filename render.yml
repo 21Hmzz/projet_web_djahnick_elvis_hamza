@@ -1,0 +1,14 @@
+version: '1'
+
+services:
+  - type: redis
+    name: redis
+    plan: free
+    ipAllowList: []
+
+  - type: web
+    name: nestapp
+    runtime: image
+    plan: free
+    image:
+      url: 21hmzz/21hmzz-nestapp:latest
