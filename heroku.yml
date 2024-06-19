@@ -1,11 +1,13 @@
-setup:
-  addons:
-    - plan: heroku-redis
-      as: REDIS
-
 build:
   docker:
     web: Dockerfile
+    redis: Dockerfile
 
-run:
-  web: docker-compose up --no-build
+release:
+  command:
+    - docker-compose up -d
+  image: 21hmzz/21hmzz-nestapp:latest
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
