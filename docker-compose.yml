@@ -7,7 +7,7 @@ services:
       - app
 
   app:
-    build: .
+    image: 21hmzz/21hmzz-nestapp:latest
     ports:
       - "3000:3000"
     networks:
