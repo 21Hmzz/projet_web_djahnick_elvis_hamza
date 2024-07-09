@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { PlusCircle } from "lucide-react";
 import { NewConversation } from "./newconversation.dialog";
+import { Badge } from "@/components/ui/badge";
 
 type UserPayload = {
   me: User;
@@ -93,15 +94,23 @@ export default function Home() {
               data.me.conversations.map((conversation) => (
                 <div
                   key={conversation.id}
-                  className="flex flex-col border p-4 cursor-pointer rounded-lg hover:scale-105 transition-transform gap-2"
+                  className="flex  border cursor-pointer rounded-lg hover:scale-105 transition-transform justify-between items-center "
                   onClick={() => setConversation(conversation)}
                 >
-                  <p className="text-sm text-gray-800">
-                    {conversation.recipient.firstname}{" "}
-                    {conversation.recipient.lastname}
-                  </p>
-                  <Separator />
-                  <p className="text-sm text-gray-800">{conversation.name}</p>
+                  <Button variant={"link"} className="flex items-center gap-2">
+                    {conversation.name}{" "}
+                    {conversation.messages.filter(
+                      (m) => m.userId !== data.me.id && !m.read
+                    ).length > 0 && (
+                      <Badge>
+                        {
+                          conversation.messages.filter(
+                            (m) => m.userId !== data.me.id && !m.read
+                          ).length
+                        }
+                      </Badge>
+                    )}
+                  </Button>
                 </div>
               ))}
           </div>

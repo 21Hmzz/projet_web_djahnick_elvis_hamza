@@ -2,6 +2,7 @@
 import { ApolloError, gql } from "@apollo/client";
 import { getClient } from "@/lib/client";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 const LOGIN = gql`
   mutation Login($email: String!, $password: String!) {
@@ -51,6 +52,12 @@ export const login = async (email: string, password: string) => {
       };
     }
   }
+};
+
+export const logout = () => {
+  const requestCookies = cookies();
+  requestCookies.delete("token_graphql");
+  redirect("/login");
 };
 
 export const register = async (

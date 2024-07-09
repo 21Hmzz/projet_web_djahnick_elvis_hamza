@@ -24,6 +24,7 @@ export const get_me = gql`
           content
           conversationId
           date
+          read
           id
           userId
         }
@@ -154,6 +155,14 @@ export const createMessage = gql`
 export const createConversation = gql`
   mutation Mutation($createConversationInput: CreateConversationInput!) {
     createConversation(createConversationInput: $createConversationInput) {
+      id
+    }
+  }
+`;
+
+export const updateMessage = gql`
+  mutation setMessageRead($setMessageReadId: Int!) {
+    setMessageRead(id: $setMessageReadId) {
       id
     }
   }

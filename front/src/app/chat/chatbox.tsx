@@ -1,5 +1,13 @@
 import * as React from "react";
-import { Check, DeleteIcon, Menu, Plus, Send, Trash } from "lucide-react";
+import {
+  Check,
+  CheckCheck,
+  DeleteIcon,
+  Menu,
+  Plus,
+  Send,
+  Trash,
+} from "lucide-react";
 import { getCookie } from "cookies-next";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -39,7 +47,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { toast } from "react-hot-toast";
-import { createMessage, get_conversation_messages, get_users } from "@/graphql";
+import {
+  createMessage,
+  get_conversation_messages,
+  get_users,
+  updateMessage,
+} from "@/graphql";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { Conversation, Message, User } from "@/__generated__/graphql";
 
@@ -54,12 +67,38 @@ export function ChatBox({
 }) {
   const [open, setOpen] = React.useState(false);
   const [addMessage, { loading, error }] = useMutation(createMessage);
+  const [editMessage, { loading: updateLoading, error: updateError }] =
+    useMutation(updateMessage);
   const [input, setInput] = React.useState("");
   const messagesEndRef = React.useRef(null);
   const inputLength = input.trim().length;
 
   React.useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    (messagesEndRef.current as HTMLElement | null)?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [conversation.messages]);
+
+  const setMessageRead = async (message: Message) => {
+    try {
+      await editMessage({
+        variables: {
+          setMessageReadId: message.id,
+        },
+      });
+      refetch();
+    } catch (e) {
+      console.error(e);
+      toast.error("An error occurred while updating the message.");
+    }
+  };
+
+  React.useEffect(() => {
+    conversation.messages.map((message) => {
+      if (message.userId !== userId && !message.read) {
+        setMessageRead(message);
+      }
+    });
   }, [conversation.messages]);
 
   const handleSendMessage = async (message: string) => {
@@ -123,14 +162,27 @@ export function ChatBox({
               >
                 {message.content}
               </div>
-              <span
+              <div
                 className={cn(
-                  "flex w-max max-w-[75%] flex-col gap-2 rounded-lg  text-xs",
+                  "flex gap-2 w-max max-w-[75%] text-muted-foreground text-xs",
                   message.userId === userId ? "ml-auto" : ""
                 )}
               >
-                {dayjs(message.date).fromNow()}
-              </span>
+                <span
+                  className={cn(
+                    " text-xs",
+                    message.userId === userId ? "ml-auto" : ""
+                  )}
+                >
+                  {dayjs(message.date).fromNow()}
+                </span>
+                {message.read && message.userId === userId && (
+                  <CheckCheck className="h-4 w-4 ml-auto text-green-600" />
+                )}
+                {!message.read && message.userId === userId && (
+                  <Check className="h-4 w-4 ml-auto text-muted-foreground" />
+                )}
+              </div>
             </>
           ))}
           <div ref={messagesEndRef} />

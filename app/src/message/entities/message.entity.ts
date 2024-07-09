@@ -16,4 +16,10 @@ export class Message {
 
   @Field(() => Int, { description: 'Id of the user' })
   userId: number;
+
+  @Field(() => Boolean, {
+    description: 'Is the message read',
+    defaultValue: false,
+  })
+  read: boolean;
 }

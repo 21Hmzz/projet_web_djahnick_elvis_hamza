@@ -71,7 +71,6 @@ export class UsersResolver {
     @Args('email') email: string,
     @Args('password') password: string,
   ) {
-    console.log('login', email, password);
     return this.authService.login(email, password);
   }
 

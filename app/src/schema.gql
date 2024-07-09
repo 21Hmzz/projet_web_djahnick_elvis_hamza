@@ -75,6 +75,9 @@ type Message {
   """Id of the message"""
   id: Int!
 
+  """Is the message read"""
+  read: Boolean!
+
   """Id of the user"""
   userId: Int!
 }
@@ -87,6 +90,7 @@ type Mutation {
   removeConversation(id: Int!): Conversation!
   removeMessage(id: Int!): Message!
   removeUser(id: Int!): User!
+  setMessageRead(id: Int!): Message!
   signIn(email: String!, firstname: String!, lastname: String!, password: String!): AuthPayload!
   updateConversation(updateConversationInput: UpdateConversationInput!): Conversation!
   updateMessage(updateMessageInput: UpdateMessageInput!): Message!

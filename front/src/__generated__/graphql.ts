@@ -77,6 +77,8 @@ export type Message = {
   date: Scalars['String']['output'];
   /** Id of the message */
   id: Scalars['Int']['output'];
+  /** Is the message read */
+  read: Scalars['Boolean']['output'];
   /** Id of the user */
   userId: Scalars['Int']['output'];
 };

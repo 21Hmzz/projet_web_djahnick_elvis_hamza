@@ -118,4 +118,19 @@ export class MessageService {
           });
       });
   }
+
+  async setMessageRead(id: number) {
+    return this.redis.get(`message:${id}`).then((message) => {
+      if (!message) {
+        return null;
+      }
+      const parsedMessage = JSON.parse(message);
+      const updatedMessage = {
+        ...parsedMessage,
+        read: true,
+      };
+      this.redis.set(`message:${id}`, JSON.stringify(updatedMessage));
+      return updatedMessage;
+    });
+  }
 }
