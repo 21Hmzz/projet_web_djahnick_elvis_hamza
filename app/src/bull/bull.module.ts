@@ -7,7 +7,11 @@ import { MessageService } from 'src/message/message.service';
 @Module({
   imports: [
     BullModule.forRoot({
-      redis: 'redis://red-cppadpqj1k6c73fvf120:6379',
+      // redis: 'redis://red-cppadpqj1k6c73fvf120:6379',
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
     }),
     BullModule.registerQueue(
       {

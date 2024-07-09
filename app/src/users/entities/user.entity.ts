@@ -17,3 +17,9 @@ export class User {
   @Field({ description: 'Password of the user' })
   password: string;
 }
+
+@ObjectType()
+export class AuthPayload {
+  @Field()
+  token: string;
+}

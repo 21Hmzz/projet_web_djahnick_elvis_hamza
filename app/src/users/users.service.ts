@@ -3,11 +3,13 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { Injectable } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
 import { Redis } from 'ioredis';
+import { JwtService } from '@nestjs/jwt';
 import { ConversationService } from 'src/conversation/conversation.service';
 
 @Injectable()
 export class UsersService {
   constructor(
+    private jwtService: JwtService,
     @Inject('REDIS') private readonly redis: Redis,
     private readonly conversationsService: ConversationService,
   ) {}
@@ -16,6 +18,11 @@ export class UsersService {
     const userWithId = { id, ...createUserInput };
     this.redis.set(`user:${id}`, JSON.stringify(userWithId));
     return userWithId;
+  }
+
+  me(token: string) {
+    const user = this.jwtService.decode(token);
+    return this.findOne(user.id);
   }
 
   findAll() {
@@ -44,6 +51,17 @@ export class UsersService {
     const parsedUser = JSON.parse(user);
     const conversations = await this.conversationsService.findAllByUserId(id);
     return { ...parsedUser, id: parseInt(parsedUser.id), conversations };
+  }
+  async findOneByEmail(email: string) {
+    const keys = await this.redis.keys('user:*');
+    for (const key of keys) {
+      const user = await this.redis.get(key);
+      const parsedUser = JSON.parse(user);
+      if (parsedUser.email === email) {
+        return { ...parsedUser, id: parseInt(parsedUser.id) };
+      }
+    }
+    return null;
   }
 
   update(id: number, updateUserInput: UpdateUserInput) {

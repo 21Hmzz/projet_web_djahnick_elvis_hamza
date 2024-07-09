@@ -1,4 +1,5 @@
 "use client";
+import { Message } from "@/__generated__/graphql";
 import { gql, useQuery } from "@apollo/client";
 import Image from "next/image";
 
@@ -16,7 +17,7 @@ export default function Home() {
     <div>
       <h1>Messages</h1>
       <ul>
-        {data.messages.map((message) => (
+        {data.messages.map((message: Message) => (
           <li key={message.id}>
             <p>{message.content}</p>
             <p>{message.userId}</p>

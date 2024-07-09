@@ -13,6 +13,9 @@ import { HealthResolver } from './health/health.resolver';
 import { ConversationModule } from './conversation/conversation.module';
 import { MessageModule } from './message/message.module';
 import { RedisModule } from './redis/redis.module';
+import { AuthModule } from './auth/auth.module';
+import { AuthService } from './auth/auth.service';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
 @Module({
   imports: [
@@ -24,12 +27,16 @@ import { RedisModule } from './redis/redis.module';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
+      context: ({ req }) => ({ user: req.user }),
+      playground: false,
+      plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
     UsersModule,
     ConversationModule,
     MessageModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, UsersResolver, HealthResolver],
+  providers: [AppService, UsersResolver, HealthResolver, AuthService],
 })
 export class AppModule {}

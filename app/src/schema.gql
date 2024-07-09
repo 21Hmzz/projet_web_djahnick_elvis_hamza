@@ -2,15 +2,22 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AuthPayload {
+  token: String!
+}
+
 type Conversation {
   """Id of the conversation"""
   id: Int!
+  messages: [Message!]!
 
   """Name of the conversation"""
   name: String
+  recipient: User!
 
   """Id of the recipient"""
   recipientId: Int!
+  user: User!
 
   """Id of the user"""
   userId: Int!
@@ -76,9 +83,11 @@ type Mutation {
   createConversation(createConversationInput: CreateConversationInput!): Conversation!
   createMessage(createMessageInput: CreateMessageInput!): Message!
   createUser(createUserInput: CreateUserInput!): User!
+  login(email: String!, password: String!): AuthPayload!
   removeConversation(id: Int!): Conversation!
   removeMessage(id: Int!): Message!
   removeUser(id: Int!): User!
+  signIn(email: String!, firstname: String!, lastname: String!, password: String!): AuthPayload!
   updateConversation(updateConversationInput: UpdateConversationInput!): Conversation!
   updateMessage(updateMessageInput: UpdateMessageInput!): Message!
   updateUser(updateUserInput: UpdateUserInput!): User!
@@ -89,6 +98,7 @@ type Query {
   conversationMessages(id: Int!): [Message!]!
   conversations: [Conversation!]!
   getHealth: String!
+  me: User!
   message(id: Int!): Message!
   messages: [Message!]!
   user(id: Int!): User!
@@ -120,6 +130,8 @@ input UpdateUserInput {
 }
 
 type User {
+  conversations: [Conversation!]!
+
   """Email of the user"""
   email: String!
 
