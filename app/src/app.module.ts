@@ -30,6 +30,9 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
       context: ({ req }) => ({ user: req.user }),
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
+      subscriptions: {
+        'graphql-ws': true,
+      },
     }),
     UsersModule,
     ConversationModule,
