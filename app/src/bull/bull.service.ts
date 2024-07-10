@@ -7,15 +7,14 @@ export class BullService {
   constructor(@InjectQueue('redisqueue') private readonly RedisQueue: Queue) {}
 
   async addJob(data: any) {
-    await this.RedisQueue.add(data);
+    await this.RedisQueue.add(JSON.stringify(data));
   }
 }
 
 @Injectable()
 export class MessageBullService {
   constructor(@InjectQueue('messages') private readonly messagesQueue: Queue) {}
-
   async addJob(data: any) {
-    await this.messagesQueue.add(data);
+    await this.messagesQueue.add('data', JSON.stringify(data));
   }
 }

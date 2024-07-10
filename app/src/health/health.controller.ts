@@ -11,7 +11,11 @@ export class HealthController {
 
   @Get()
   async getHealth(): Promise<string> {
-    await this.bullService.addJob({ data: 'Health Check OK 👌🏼' });
+    try {
+      await this.bullService.addJob({ data: 'Hello from Bull' });
+    } catch (error) {
+      throw new Error('Error adding job to bull queue');
+    }
     return this.healthService.getHealth();
   }
 

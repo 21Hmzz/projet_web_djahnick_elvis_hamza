@@ -55,6 +55,7 @@ import {
 } from "@/graphql";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { Conversation, Message, User } from "@/__generated__/graphql";
+import useChat from "@/lib/useChat";
 
 export function ChatBox({
   conversation,
@@ -65,6 +66,12 @@ export function ChatBox({
   refetch: () => void;
   userId: number;
 }) {
+  const {
+    messages,
+    sendMessage,
+    loading: websocketLoading,
+    error: websocketError,
+  } = useChat(conversation.id);
   const [open, setOpen] = React.useState(false);
   const [addMessage, { loading, error }] = useMutation(createMessage);
   const [editMessage, { loading: updateLoading, error: updateError }] =
@@ -77,7 +84,7 @@ export function ChatBox({
     (messagesEndRef.current as HTMLElement | null)?.scrollIntoView({
       behavior: "smooth",
     });
-  }, [conversation.messages]);
+  }, [messages]);
 
   const setMessageRead = async (message: Message) => {
     try {
@@ -103,17 +110,18 @@ export function ChatBox({
 
   const handleSendMessage = async (message: string) => {
     try {
-      await addMessage({
-        variables: {
-          createMessageInput: {
-            content: message,
-            conversationId: conversation.id,
-            userId: userId,
-            date: new Date().toISOString(),
-          },
-        },
-      });
-      refetch();
+      sendMessage(message, userId);
+      // await addMessage({
+      //   variables: {
+      //     createMessageInput: {
+      //       content: message,
+      //       conversationId: conversation.id,
+      //       userId: userId,
+      //       date: new Date().toISOString(),
+      //     },
+      //   },
+      // });
+      // refetch();
     } catch (e) {
       console.error(e);
       toast.error("An error occurred while sending the message.");
@@ -121,7 +129,7 @@ export function ChatBox({
   };
 
   return (
-    <Card className="max-h-[80vh] flex flex-col ">
+    <Card className="md:max-h-[80vh] flex flex-col ">
       <CardHeader className="flex flex-row items-center">
         <div className="flex items-center space-x-4">
           <Avatar>
@@ -149,42 +157,43 @@ export function ChatBox({
             {conversation.userId === userId ? "Vous" : "L'utilisateur"} avez{" "}
             démarrer une conversation
           </span>
-          {conversation.messages.map((message, index) => (
-            <>
-              <div
-                key={index}
-                className={cn(
-                  "flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
-                  message.userId === userId
-                    ? "ml-auto bg-primary text-primary-foreground"
-                    : "bg-muted"
-                )}
-              >
-                {message.content}
-              </div>
-              <div
-                className={cn(
-                  "flex gap-2 w-max max-w-[75%] text-muted-foreground text-xs",
-                  message.userId === userId ? "ml-auto" : ""
-                )}
-              >
-                <span
+
+          {messages &&
+            messages.map((message, index) => (
+              <div key={index}>
+                <div
                   className={cn(
-                    " text-xs",
+                    "flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
+                    message.userId === userId
+                      ? "ml-auto bg-primary text-primary-foreground"
+                      : "bg-muted"
+                  )}
+                >
+                  {message.content}
+                </div>
+                <div
+                  className={cn(
+                    "flex gap-2 w-max max-w-[75%] text-muted-foreground text-xs",
                     message.userId === userId ? "ml-auto" : ""
                   )}
                 >
-                  {dayjs(message.date).fromNow()}
-                </span>
-                {message.read && message.userId === userId && (
-                  <CheckCheck className="h-4 w-4 ml-auto text-green-600" />
-                )}
-                {!message.read && message.userId === userId && (
-                  <Check className="h-4 w-4 ml-auto text-muted-foreground" />
-                )}
+                  <span
+                    className={cn(
+                      " text-xs",
+                      message.userId === userId ? "ml-auto" : ""
+                    )}
+                  >
+                    {dayjs(message.date).fromNow()}
+                  </span>
+                  {message.read && message.userId === userId && (
+                    <CheckCheck className="h-4 w-4 ml-auto text-green-600" />
+                  )}
+                  {!message.read && message.userId === userId && (
+                    <Check className="h-4 w-4 ml-auto text-muted-foreground" />
+                  )}
+                </div>
               </div>
-            </>
-          ))}
+            ))}
           <div ref={messagesEndRef} />
         </div>
       </CardContent>

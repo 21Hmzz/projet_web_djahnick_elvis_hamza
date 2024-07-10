@@ -11,14 +11,17 @@ export class MessageService {
     private readonly messageBullService: MessageBullService,
   ) {}
   async create(createMessageInput: CreateMessageInput) {
+    console.log('createMessageInput', createMessageInput);
     const id = await this.redis.incr('id');
     const messageWithId = { id, ...createMessageInput };
-    await this.messageBullService.addJob(messageWithId);
+    await this.messageBullService.addJob({ data: messageWithId });
     return messageWithId;
   }
 
   async saveMessage(message: any) {
-    this.redis.set(`message:${message.id}`, JSON.stringify(message));
+    let data = JSON.parse(message);
+    data = data.data;
+    await this.redis.set(`message:${data.id}`, JSON.stringify(data));
   }
 
   // findAll() {

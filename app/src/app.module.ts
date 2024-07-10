@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { HealthModule } from './health/health.module';
@@ -7,22 +7,22 @@ import { BullQueueModule } from './bull/bull.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
-import { UsersResolver } from './users/users.resolver';
 import { UsersModule } from './users/users.module';
-import { HealthResolver } from './health/health.resolver';
 import { ConversationModule } from './conversation/conversation.module';
-import { MessageModule } from './message/message.module';
 import { RedisModule } from './redis/redis.module';
 import { AuthModule } from './auth/auth.module';
-import { AuthService } from './auth/auth.service';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import { ChatModule } from './chat.module';
+import { MessageModule } from './message/message.module';
 
 @Module({
   imports: [
-    RedisModule,
-    HealthModule,
-    AppRoutingModule,
+    forwardRef(() => ChatModule),
+    forwardRef(() => RedisModule),
+    forwardRef(() => HealthModule),
+    // forwardRef(() => BullQueueModule),
     BullQueueModule,
+    AppRoutingModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
@@ -34,12 +34,12 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
         'graphql-ws': true,
       },
     }),
-    UsersModule,
-    ConversationModule,
-    MessageModule,
-    AuthModule,
+    forwardRef(() => UsersModule),
+    forwardRef(() => MessageModule),
+    forwardRef(() => ConversationModule),
+    forwardRef(() => AuthModule),
   ],
   controllers: [AppController],
-  providers: [AppService, UsersResolver, HealthResolver, AuthService],
+  providers: [AppService],
 })
 export class AppModule {}
