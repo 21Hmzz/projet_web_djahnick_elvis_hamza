@@ -12,6 +12,7 @@
   "dependencies": {
     "@apollo/client": "3.10.5",
     "@apollo/experimental-nextjs-app-support": "^0.11.2",
+    "@graphql-typed-document-node/core": "^3.2.0",
     "@hookform/resolvers": "^3.6.0",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
@@ -50,6 +51,7 @@
     "dayjs": "^1.11.11",
     "dlx": "^0.2.1",
     "embla-carousel-react": "^8.1.5",
+    "graphql": "^16.9.0",
     "init": "^0.1.2",
     "input-otp": "^1.2.4",
     "lucide-react": "^0.395.0",
