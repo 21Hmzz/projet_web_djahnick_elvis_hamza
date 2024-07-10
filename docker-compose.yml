@@ -20,9 +20,7 @@ services:
       - app
 
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile.backend
+    image: 21hmzz/21hmzz-nestapp-backend
     ports:
       - "3000:3000"
     networks:
@@ -40,9 +38,7 @@ services:
       - postgres
 
   frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
+    image: 21hmzz/21hmzz-nestapp-frontend
     ports:
       - "8080:8080"
     networks:
