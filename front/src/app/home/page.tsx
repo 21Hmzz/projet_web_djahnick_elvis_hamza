@@ -86,10 +86,10 @@ export default function Home() {
   // }, 3000);
 
   return (
-    <div className="p-4  h-full">
-      <div className="flex flex-col gap-2  w-full ">
+    <div className="p-4  h-full md:w-full ">
+      <div className="flex flex-col gap-2 w-full ">
         <div className="flex gap-2">
-          <div className="flex gap-2 p-4 w-full overflow-x-auto  shadow-md rounded-lg">
+          <div className="flex gap-2 p-4 w-full overflow-x-auto shadow-md rounded-lg">
             {data &&
               data.me.conversations.map((conversation) => (
                 <div
@@ -122,7 +122,7 @@ export default function Home() {
             </span>
           </div>
         </div>
-        <div className=" min-h-[80vh]  max-h-[80vh] overflow-y-auto">
+        <div className="md:min-h-[80vh]  md:max-h-[80vh] overflow-y-auto">
           {conversation && data && (
             <ChatBox
               refetch={handleRefetch}

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from 'src/guards/passport-strategy';
 // import { AuthResolver } from './auth.resolver';
@@ -12,9 +12,9 @@ import { AuthService } from './auth.service';
       secretOrPrivateKey: 'secret',
       signOptions: { expiresIn: '600s' },
     }),
-    UsersModule,
+    forwardRef(() => UsersModule),
   ],
   providers: [JwtStrategy, AuthService],
-  exports: [JwtStrategy, JwtModule],
+  exports: [JwtStrategy, JwtModule, AuthService],
 })
 export class AuthModule {}
