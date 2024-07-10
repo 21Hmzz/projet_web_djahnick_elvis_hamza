@@ -12,7 +12,7 @@ setVerbosity("debug");
 function makeClient() {
   const httpLink = new HttpLink({
     // uri: "https://nestapp-j6j9.onrender.com/graphql",
-    uri: "http://localhost:3000/graphql",
+    uri: "https://nestapp-j6j9.onrender.com/graphql",
     fetchOptions: { cache: "no-store" },
   });
 

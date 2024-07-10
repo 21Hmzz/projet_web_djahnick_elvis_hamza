@@ -3,7 +3,7 @@ import io from "socket.io-client";
 import { get_conversation_messages } from "@/graphql";
 import { useQuery } from "@apollo/client";
 
-const SOCKET_SERVER_URL = "http://localhost:3000"; // Remplacez par l'URL de votre serveur NestJS
+const SOCKET_SERVER_URL = "https://nestapp-j6j9.onrender.com"; // Remplacez par l'URL de votre serveur NestJS
 
 type Message = {
   id: number;

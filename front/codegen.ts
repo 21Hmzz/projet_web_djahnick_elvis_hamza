@@ -2,7 +2,7 @@ import { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
   // schema: "https://nestapp-j6j9.onrender.com/graphql",
-  schema: "http://backend:3000/graphql",
+  schema: "https://nestapp-j6j9.onrender.com/graphql",
   documents: ["src/**/*.tsx"],
   generates: {
     "./src/__generated__/": {

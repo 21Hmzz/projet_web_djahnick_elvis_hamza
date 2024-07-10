@@ -14,7 +14,7 @@ export const { getClient, query, PreloadQuery } = registerApolloClient(() => {
     cache: new InMemoryCache(),
     link: new HttpLink({
       // uri: "https://nestapp-j6j9.onrender.com/graphql",
-      uri: "http://backend:3000/graphql",
+      uri: "https://nestapp-j6j9.onrender.com/graphql",
     }),
   });
 });
