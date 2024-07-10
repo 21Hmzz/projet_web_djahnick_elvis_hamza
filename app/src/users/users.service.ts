@@ -5,6 +5,7 @@ import { Inject } from '@nestjs/common';
 import { Redis } from 'ioredis';
 import { JwtService } from '@nestjs/jwt';
 import { ConversationService } from 'src/conversation/conversation.service';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
@@ -12,11 +13,15 @@ export class UsersService {
     private jwtService: JwtService,
     @Inject('REDIS') private readonly redis: Redis,
     private readonly conversationsService: ConversationService,
+    private readonly prisma: PrismaClient 
   ) {}
   async create(createUserInput: CreateUserInput) {
     const id = await this.redis.incr('id');
     const userWithId = { id, ...createUserInput };
     this.redis.set(`user:${id}`, JSON.stringify(userWithId));
+    this.prisma.user.create({
+      data: createUserInput
+    })
     return userWithId;
   }
 
@@ -72,6 +77,10 @@ export class UsersService {
       const parsedUser = JSON.parse(user);
       const updatedUser = { ...parsedUser, ...updateUserInput };
       this.redis.set(`user:${id}`, JSON.stringify(updatedUser));
+      this.prisma.user.update({
+        where:{id : id},
+        data: updatedUser
+      })
       return updatedUser;
     });
   }
@@ -82,6 +91,9 @@ export class UsersService {
         return null;
       }
       this.redis.del(`user:${id}`);
+      this.prisma.user.delete({
+        where:{id : id},
+      })
       return JSON.parse(user);
     });
   }

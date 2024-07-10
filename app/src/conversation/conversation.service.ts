@@ -3,17 +3,23 @@ import { CreateConversationInput } from './dto/create-conversation.input';
 import { UpdateConversationInput } from './dto/update-conversation.input';
 import { MessageService } from 'src/message/message.service';
 import { Redis } from 'ioredis';
+import { PrismaClient } from '@prisma/client';
+
 
 @Injectable()
 export class ConversationService {
   constructor(
     @Inject('REDIS') private readonly redis: Redis,
     private messagesService: MessageService,
+    private readonly prisma: PrismaClient
   ) {}
   async create(createConversationInput: CreateConversationInput) {
     const id = await this.redis.incr('id');
     const conversationWithId = { id, ...createConversationInput };
     this.redis.set(`conversation:${id}`, JSON.stringify(conversationWithId));
+    this.prisma.conversation.create({
+      data: createConversationInput
+    })
     return conversationWithId;
   }
 
@@ -60,6 +66,10 @@ export class ConversationService {
         ...updateConversationInput,
       };
       this.redis.set(`conversation:${id}`, JSON.stringify(updatedConversation));
+      this.prisma.conversation.update({
+        where: {id: id},
+        data: updatedConversation
+      })
       return updatedConversation;
     });
   }
@@ -70,6 +80,9 @@ export class ConversationService {
         return null;
       }
       this.redis.del(`conversation:${id}`);
+      this.prisma.conversation.delete({
+        where: {id: id},
+      })
       return JSON.parse(conversation);
     });
   }

@@ -14,11 +14,11 @@ datasource db {
 }
 
 
-model User {
+model User {User model
   id Int @id @default(autoincrement())
   email String @unique
-  firstName String
-  lastName String
+  firstname String
+  lastname String
   password String
   conversations Conversation[]
   messages Message[]
