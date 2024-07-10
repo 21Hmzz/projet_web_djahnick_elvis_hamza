@@ -3,7 +3,7 @@ import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
-import { Conversation } from 'src/conversation/entities/conversation.entity';
+import { Conversation } from '../conversation/entities/conversation.entity';
 
 @Resolver(() => User)
 export class UsersResolver {

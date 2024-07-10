@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { CreateConversationInput } from './dto/create-conversation.input';
 import { UpdateConversationInput } from './dto/update-conversation.input';
-import { MessageService } from 'src/message/message.service';
+import { MessageService } from '../message/message.service';
 import { Redis } from 'ioredis';
 
 @Injectable()

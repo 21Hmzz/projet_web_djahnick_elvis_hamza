@@ -3,7 +3,7 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { Injectable } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
 import { Redis } from 'ioredis';
-import { ConversationService } from 'src/conversation/conversation.service';
+import { ConversationService } from '../conversation/conversation.service';
 
 @Injectable()
 export class UsersService {

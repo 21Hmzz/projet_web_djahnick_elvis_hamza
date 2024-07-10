@@ -2,7 +2,8 @@ import { Injectable, Inject } from '@nestjs/common';
 import { CreateMessageInput } from './dto/create-message.input';
 import { UpdateMessageInput } from './dto/update-message.input';
 import { Redis } from 'ioredis';
-import { MessageBullService } from 'src/bull/bull.service';
+import { MessageBullService } from '../bull/bull.service';
+
 
 @Injectable()
 export class MessageService {
