@@ -40,7 +40,7 @@ jobs:
       - name: Build and Push Frontend Docker image
         uses: docker/build-push-action@v6
         with:
-          context: ./front
+          context: .
           file: Dockerfile.frontend
           platforms: linux/amd64,linux/arm64
           push: true
