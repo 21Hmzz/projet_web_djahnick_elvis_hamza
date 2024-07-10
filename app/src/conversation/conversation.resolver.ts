@@ -1,13 +1,28 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { ConversationService } from './conversation.service';
 import { Conversation } from './entities/conversation.entity';
 import { CreateConversationInput } from './dto/create-conversation.input';
 import { UpdateConversationInput } from './dto/update-conversation.input';
 import { Message } from 'src/message/entities/message.entity';
+import { User } from 'src/users/entities/user.entity';
+import { MessageService } from 'src/message/message.service';
+import { UsersService } from 'src/users/users.service';
 
 @Resolver(() => Conversation)
 export class ConversationResolver {
-  constructor(private readonly conversationService: ConversationService) {}
+  constructor(
+    private readonly conversationService: ConversationService,
+    private messageService: MessageService,
+    private userService: UsersService,
+  ) {}
 
   @Mutation(() => Conversation)
   createConversation(
@@ -47,5 +62,20 @@ export class ConversationResolver {
   @Mutation(() => Conversation)
   removeConversation(@Args('id', { type: () => Int }) id: number) {
     return this.conversationService.remove(id);
+  }
+
+  @ResolveField(() => [Message])
+  async messages(@Parent() conversation: Conversation) {
+    return this.messageService.findAllByConversationId(conversation.id);
+  }
+
+  @ResolveField(() => User)
+  async user(@Parent() conversation: Conversation) {
+    return this.userService.findOne(conversation.userId);
+  }
+
+  @ResolveField(() => User)
+  async recipient(@Parent() conversation: Conversation) {
+    return this.userService.findOne(conversation.recipientId);
   }
 }

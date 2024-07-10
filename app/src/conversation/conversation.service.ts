@@ -83,7 +83,11 @@ export class ConversationService {
       .then((conversations) => {
         return conversations
           .map((conversation) => JSON.parse(conversation))
-          .filter((conversation) => conversation.userId === userId)
+          .filter(
+            (conversation) =>
+              conversation.userId === userId ||
+              conversation.recipientId === userId,
+          )
           .map((conversation) => {
             return { ...conversation, id: parseInt(conversation.id) };
           });

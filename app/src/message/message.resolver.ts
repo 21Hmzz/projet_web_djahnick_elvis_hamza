@@ -39,4 +39,9 @@ export class MessageResolver {
   removeMessage(@Args('id', { type: () => Int }) id: number) {
     return this.messageService.remove(id);
   }
+
+  @Mutation(() => Message)
+  setMessageRead(@Args('id', { type: () => Int }) id: number) {
+    return this.messageService.setMessageRead(id);
+  }
 }
