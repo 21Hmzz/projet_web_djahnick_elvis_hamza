@@ -1,0 +1,11 @@
+# Build stage for frontend
+FROM node:21 AS builder
+WORKDIR /app
+COPY ./front/package*.json ./
+RUN npm install
+COPY ./front .
+# RUN npm run generate
+# RUN npm run build
+
+EXPOSE 8080
+CMD ["npm", "run", "start"]

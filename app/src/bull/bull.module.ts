@@ -12,7 +12,7 @@ import { MessageModule } from 'src/message/message.module';
     BullModule.forRoot({
       // redis: 'redis://red-cppadpqj1k6c73fvf120:6379',
       connection: {
-        host: 'localhost',
+        host: 'redis',
         port: 6379,
       },
     }),
@@ -27,7 +27,7 @@ import { MessageModule } from 'src/message/message.module';
     BullModule.registerFlowProducer({
       name: 'redis',
       connection: {
-        host: 'localhost',
+        host: 'redis',
         port: 6379,
       },
     }),
