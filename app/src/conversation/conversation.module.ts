@@ -6,6 +6,8 @@ import { JwtService } from '@nestjs/jwt';
 import { ChatModule } from 'src/chat.module';
 import { UsersModule } from 'src/users/users.module';
 import { MessageModule } from 'src/message/message.module';
+import { PrismaClient } from '@prisma/client';
+
 
 @Module({
   imports: [
@@ -14,7 +16,7 @@ import { MessageModule } from 'src/message/message.module';
     forwardRef(() => UsersModule),
     forwardRef(() => MessageModule),
   ],
-  providers: [ConversationResolver, ConversationService, JwtService],
+  providers: [ConversationResolver, ConversationService, JwtService,PrismaClient],
   exports: [ConversationService],
 })
 export class ConversationModule {}

@@ -3,12 +3,14 @@ import { CreateMessageInput } from './dto/create-message.input';
 import { UpdateMessageInput } from './dto/update-message.input';
 import { Redis } from 'ioredis';
 import { MessageBullService } from 'src/bull/bull.service';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class MessageService {
   constructor(
     @Inject('REDIS') private readonly redis: Redis,
     private readonly messageBullService: MessageBullService,
+    private readonly prisma : PrismaClient
   ) {}
   async create(createMessageInput: CreateMessageInput) {
     console.log('createMessageInput', createMessageInput);
@@ -22,6 +24,9 @@ export class MessageService {
     let data = JSON.parse(message);
     data = data.data;
     await this.redis.set(`message:${data.id}`, JSON.stringify(data));
+    await this.prisma.message.create({
+      data: message
+    })
   }
 
   // findAll() {
@@ -81,11 +86,20 @@ export class MessageService {
         ...updateMessageInput,
       };
       this.redis.set(`message:${id}`, JSON.stringify(updatedMessage));
+      this.prisma.message.update({
+        where:{id : id},      
+        data: updatedMessage
+      
+      })
+
       return updatedMessage;
     });
   }
 
   remove(id: number) {
+    this.prisma.message.delete({
+      where:{id : id},
+    })
     return this.redis.del(`message:${id}`);
   }
   // async findAllByConversationId(conversationId: number) {
