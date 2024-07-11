@@ -135,14 +135,26 @@ export function ChatBox({
           <Avatar>
             <AvatarImage src="/avatars/01.png" alt="Image" />
             <AvatarFallback>
-              {conversation.recipient.firstname[0]}
-              {conversation.recipient.lastname[0]}
+              {conversation.userId === userId
+                ? conversation.recipient.firstname[0]
+                : conversation.user.firstname[0]}
+              {conversation.userId === userId
+                ? conversation.recipient.lastname[0]
+                : conversation.user.lastname[0]}
             </AvatarFallback>
           </Avatar>
           <div>
             <p className="text-sm font-medium leading-none">
-              {conversation.recipient.firstname}{" "}
-              {conversation.recipient.lastname}
+              {conversation.userId === userId ? (
+                <span>
+                  {conversation.recipient.firstname}{" "}
+                  {conversation.recipient.lastname}
+                </span>
+              ) : (
+                <span>
+                  {conversation.user.firstname} {conversation.user.lastname}
+                </span>
+              )}
             </p>
             <p className="text-sm text-muted-foreground">
               {conversation.recipient.email}
@@ -154,7 +166,7 @@ export function ChatBox({
       <CardContent className="h-full overflow-y-auto flex flex-col gap-4 p-4">
         <div className="space-y-4">
           <span className="text-xs text-muted-foreground text-center ">
-            {conversation.userId === userId ? "Vous" : "L'utilisateur"} avez{" "}
+            {conversation.userId === userId ? "Vous avez" : "L'utilisateur a"}{" "}
             démarrer une conversation
           </span>
 
@@ -163,7 +175,7 @@ export function ChatBox({
               <div key={index}>
                 <div
                   className={cn(
-                    "flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
+                    "flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm break-all",
                     message.userId === userId
                       ? "ml-auto bg-primary text-primary-foreground"
                       : "bg-muted"

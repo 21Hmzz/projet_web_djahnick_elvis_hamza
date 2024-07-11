@@ -83,6 +83,7 @@ export function NewConversation({
         },
       });
       toast.success("Conversation créée avec succès");
+      window.location.reload();
       refetch();
     } catch (e) {
       toast.error("Erreur lors de la création de la conversation");
@@ -180,7 +181,7 @@ export function NewConversation({
         </div>
         <DialogFooter>
           <Button onClick={handleCreateConversation} type="submit">
-            Save changes
+            Créer
           </Button>
         </DialogFooter>
       </DialogContent>
